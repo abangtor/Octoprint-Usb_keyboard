@@ -4,6 +4,7 @@
   
 import threading
 import ctypes
+import os.path
 import time
 from evdev import InputDevice, categorize, ecodes, list_devices
 from octoprint.events import eventManager
@@ -15,6 +16,9 @@ class KeyboardListenerThread(threading.Thread):
       self.device_path = device_path
             
   def run(self): 
+    while not os.path.exists(self.device_path):
+      time.sleep(1)
+  
     device = InputDevice(self.device_path)
     
     key_dict = {}
